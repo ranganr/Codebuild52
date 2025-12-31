@@ -94,10 +94,31 @@ resource "aws_codebuild_project" "project" {
     type         = "LINUX_CONTAINER"
   }
 
-  source {
-    type      = "CODEPIPELINE"   # Source provided by CodePipeline
-    buildspec = <sts:AssumeRole, type = "KMS" }
+#  source {
+#    type      = "CODEPIPELINE"   # Source provided by CodePipeline
+#    buildspec = <sts:AssumeRole, type = "KMS" }
+#  }
+source {
+    type      = "CODEPIPELINE"
+    buildspec = <<-EOT
+      version: 0.2
+      phases:
+        build:
+          commands:
+            - echo "Build started"
+            - mkdir -p dist
+            - cp -r * dist/ || true
+            - zip -r build_output.zip dist
+      artifacts:
+        files:
+          - build_output.zip
+    EOT
   }
+
+  logs_config {
+    cloudwatch_logs { status = "ENABLED" }
+  }
+}
 
   # --- SOURCE (GitHub via CodeStar Connections) ---
   stage {
