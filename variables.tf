@@ -2,7 +2,7 @@
 variable "region" {
   type        = string
   description = "AWS region"
-  default     = "ap-south-1"
+  default     = "us-west-2"
 }
 
 variable "pipeline_name" {
@@ -36,5 +36,5 @@ variable "github_repo" {
 variable "github_branch" {
   type        = string
   description = "Branch to build"
-  default     = "main"
+  default     = "dev"
 }
